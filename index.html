@@ -4049,15 +4049,15 @@ function trApply(ev,arg){
 function track(ev,arg){
   if(!ONLINE||TR.teacher)return;
   if(!TR.ref){if(TR.queue.length<500)TR.queue.push([ev,arg]);return;}
-  trApply(ev,arg);TR.dirty=true;clearTimeout(TR.timer);TR.timer=setTimeout(trFlush,ev==='card'?5000:1200);
+  trApply(ev,arg);TR.dirty=true;clearTimeout(TR.timer);TR.timer=setTimeout(trFlush,ev==='card'?20000:ev==='quiz'?800:4000);
 }
 async function trFlush(){
   if(!TR.ref||!TR.dirty||TR.writing)return;
   if(!tokenValid()){TR.state='expired';renderAcct();return;}
   TR.writing=true;TR.dirty=false;
-  try{const r=await api({action:'save',record:TR.data});if(!r.ok){if(r.error==='auth'){TR.state='expired';renderAcct();}TR.dirty=true;}}
-  catch(e){TR.dirty=true;setTimeout(trFlush,4000+Math.random()*3000);}
-  finally{TR.writing=false;if(TR.dirty&&TR.state==='in')TR.timer=setTimeout(trFlush,3000);}
+  try{const r=await api({action:'save',record:TR.data});TR.retry=0;if(!r.ok){if(r.error==='auth'){TR.state='expired';renderAcct();}TR.dirty=true;}}
+  catch(e){TR.dirty=true;TR.retry=Math.min((TR.retry||2000)*2,60000);setTimeout(trFlush,TR.retry+Math.random()*3000);return;}
+  finally{TR.writing=false;if(TR.dirty&&TR.state==='in'&&!TR.retry)TR.timer=setTimeout(trFlush,3000);}
 }
 document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='hidden'&&TR.ref&&TR.dirty&&tokenValid()){
