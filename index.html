@@ -241,7 +241,7 @@ details.sc-ex[open] .ex-arrow{transform:rotate(90deg);color:var(--teal)}
 /* progress-only badge when too many cards */
 .prog-badge{font-size:12px;font-weight:600;color:var(--fg3);text-align:center;margin-bottom:14px;padding:4px 0}
 /* card header row */
-.sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sc-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.sc-head .sc-type{margin-bottom:0;white-space:nowrap}.sc-head-r{flex-wrap:wrap;justify-content:flex-end}.sc-head-r button{white-space:nowrap}.sc-term{overflow-wrap:break-word;hyphens:manual}@media(max-width:480px){.sc-head{justify-content:flex-start}.sc-head-r{margin-left:auto}.sc-term{font-size:32px;letter-spacing:-.5px}}
 /* study card sections */
 .sc-body{margin-bottom:16px}
 .sc-examples-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--fg3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
@@ -3736,7 +3736,7 @@ function getU(uid){if(uid==='mix')return MIXU;if(uid==='star')return{id:'star',t
 function cardUid(c){return c._uid||cur.uid;}
 function qUnit(){return getU(cur.uid);}
 
-function jsq(x){return JSON.stringify(String(x==null?'':x)).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function jsq(x){return JSON.stringify(typeof x==='number'?x:String(x==null?'':x)).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 function speak(text){
   if(!('speechSynthesis' in window))return;
   window.speechSynthesis.cancel();
@@ -3799,7 +3799,7 @@ function renderStudyCard(){
     tabHtml+=`<div class="tab-row grp-tabs">
       <button class="gtab${!cur.grpFilter?' active':''}" onclick="switchGrp(null)">All (${allCards.length})</button>`+
       grps.map(g=>{const cnt=allCards.filter(c=>c.grp===g).length;
-        return`<button class="gtab${cur.grpFilter===g?' active':''}" onclick='switchGrp(${JSON.stringify(g)})'>${g} (${cnt})</button>`;}).join('')+`</div>`;
+        return`<button class="gtab${cur.grpFilter===g?' active':''}" onclick="switchGrp(${jsq(g)})">${g} (${cnt})</button>`;}).join('')+`</div>`;
   }
   if(types.length>1&&(!grps.length||cur.grpFilter)){
     tabHtml+=`<div class="tab-row type-tabs">
@@ -3872,7 +3872,7 @@ function renderStudyCard(){
   document.getElementById('study-card').innerHTML=`
     <div class="sc-head">
       <span class="sc-type ${typeColor[c.type]||'type-abbr'}">${c.grp?c.grp.split(' ').slice(-1)[0]+' · ':''}${c.typeLbl}</span>
-      <span class="sc-head-r"><button class="sc-starbtn${isStar(cardUid(c),c.term)?' on':''}" onclick='toggleStudyStar(${JSON.stringify(cardUid(c))},${JSON.stringify(c.term)},this)' title="Mark as difficult / unmark">${isStar(cardUid(c),c.term)?'★ Difficult':'☆ Mark difficult'}</button>
+      <span class="sc-head-r"><button class="sc-starbtn${isStar(cardUid(c),c.term)?' on':''}" onclick="toggleStudyStar(${jsq(cardUid(c))},${jsq(c.term)},this)" title="Mark as difficult / unmark">${isStar(cardUid(c),c.term)?'★ Difficult':'☆ Mark difficult'}</button>
       <button class="sc-audio" onclick="speak(${jsq(speakTerm)})">🔊 Listen</button></span>
     </div>
     <div class="sc-body">
@@ -4207,7 +4207,7 @@ function notesOpen(){
   document.getElementById('notes-list').innerHTML=cs.length?Object.keys(byU).map(uid=>{const u=UNITS.find(x=>x.id===+uid);
     return`<div class="nt-unit"><div class="nt-uh" style="--uc:${u.color}">${u.title} · ${u.zh}<span>${byU[uid].length}</span></div>`+
       byU[uid].map(c=>`<div class="nt-row"><div class="nt-main"><b>${c.term}</b>${c.abbr?`<span class="sc-abbr">${c.abbr}</span>`:''}<span class="nt-zh">${c.zh}</span><div class="nt-mean">${c.meaning}</div></div>
-        <button class="nt-x" title="Remove" onclick='setStar(${+uid},${JSON.stringify(c.term)},false);notesOpen()'>✕</button></div>`).join('')+`</div>`;}).join('')
+        <button class="nt-x" title="Remove" onclick="setStar(${+uid},${jsq(c.term)},false);notesOpen()">✕</button></div>`).join('')+`</div>`;}).join('')
     :`<div class="nt-empty">No starred words yet.<br>Tap “☆ Mark difficult” on a study card or after answering a question.</div>`;
   document.getElementById('notes-act').innerHTML=cs.length?`<button class="sbtn sbtn-prev" onclick="starStudy()">📖 Review Starred</button><button class="sbtn sbtn-next" onclick="starQuiz()">✏️ Quiz Starred</button>`:'';
   window.scrollTo(0,0);
@@ -4355,7 +4355,7 @@ function showFb(ok,exp){
   const fb=document.getElementById('fb');fb.hidden=false;fb.className='fb '+(ok?'ok':'err');
   const q=cur._qs[cur.qi],su=q.uid||cur.uid,on=isStar(su,q.term);
   fb.innerHTML=`<div class="fbico">${ok?'✅':'❌'}</div><div class="fbtxt"><strong>${ok?'Correct!':'Incorrect'}</strong><p>${exp}</p>
-    <button class="sc-starbtn${on?' on':''}" onclick='toggleStudyStar(${JSON.stringify(su)},${JSON.stringify(q.term)},this)'>${on?'★ Difficult':'☆ Mark difficult'}</button></div>`;
+    <button class="sc-starbtn${on?' on':''}" onclick="toggleStudyStar(${jsq(su)},${jsq(q.term)},this)">${on?'★ Difficult':'☆ Mark difficult'}</button></div>`;
   document.getElementById('nextbtn').hidden=false;
   document.getElementById('nextlbl').textContent=cur.qi===cur._qs.length-1?'See Results →':'Next Question →';
 }
