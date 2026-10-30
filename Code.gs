@@ -18,9 +18,9 @@
  */
 
 // ── 1. Settings ──────────────────────────────────────────────────────────────
-const CLIENT_ID = '';            // the same OAuth Client ID you put in index.html CONFIG
+const CLIENT_ID = '159350431685-s7095o51b6o2dvfmci9obo28v67iai65.apps.googleusercontent.com';            // the same OAuth Client ID you put in index.html CONFIG
 const TEACHERS = [               // Google accounts that may open the Teacher Dashboard
-  'janeliu@g-mail.nsysu.edu.tw',
+  'a103262003@gmail.com',
 ];
 const ALLOWED_DOMAIN = '';       // e.g. 'g-mail.nsysu.edu.tw' to accept school accounts only; '' = any Google account
 const SHEET_NAME = 'Usage';
