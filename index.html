@@ -3736,8 +3736,9 @@ function getU(uid){if(uid==='mix')return MIXU;if(uid==='star')return{id:'star',t
 function cardUid(c){return c._uid||cur.uid;}
 function qUnit(){return getU(cur.uid);}
 
+function jsq(x){return JSON.stringify(String(x==null?'':x)).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 function speak(text){
-  if(!('speechSynthesis' in window)){alert('Speech not supported.');return;}
+  if(!('speechSynthesis' in window))return;
   window.speechSynthesis.cancel();
   setTimeout(()=>{
     const utt=new SpeechSynthesisUtterance(text);
@@ -3837,7 +3838,7 @@ function renderStudyCard(){
     </div>`;
     return`<details class="sc-ex">
       <summary>
-        <button class="sc-ex-audio" title="Pronounce" onclick="event.preventDefault();event.stopPropagation();speak(${JSON.stringify(w)})">🔊</button>
+        <button class="sc-ex-audio" title="Pronounce" onclick="event.preventDefault();event.stopPropagation();speak(${jsq(w)})">🔊</button>
         ${wDisplay}
         <span class="sc-ex-zh" style="font-size:13px;color:var(--fg3);margin-left:4px">· ${ex.zh}</span>
         <span class="ex-arrow">▸</span>
@@ -3860,19 +3861,19 @@ function renderStudyCard(){
   if(!isWordPart&&c.examples&&c.examples.length){
     collocHtml=`<div class="sc-sec-lbl">Phrases · 例詞 <span class="sc-ex-hint">(tap to expand)</span></div><div class="sc-colloc">`+c.examples.map(ex=>{
       const desc=(ex.desc_en||ex.en)?`<div class="sc-colloc-desc"><div class="sc-sent-en">${ex.desc_en||ex.en||''}</div>${(ex.desc_zh||'')?`<div class="sc-sent-zh">${ex.desc_zh}</div>`:''}</div>`:'';
-      return`<details class="sc-ex sc-colloc-row"><summary><button class="sc-ex-audio" title="Pronounce" onclick="event.preventDefault();event.stopPropagation();speak(${JSON.stringify(ex.word)})">🔊</button><span class="sc-colloc-w">${ex.word}</span><span class="sc-colloc-zh">${ex.zh||''}</span>${desc?'<span class="ex-arrow">▸</span>':''}</summary>${desc}</details>`;}).join('')+`</div>`;
+      return`<details class="sc-ex sc-colloc-row"><summary><button class="sc-ex-audio" title="Pronounce" onclick="event.preventDefault();event.stopPropagation();speak(${jsq(ex.word)})">🔊</button><span class="sc-colloc-w">${ex.word}</span><span class="sc-colloc-zh">${ex.zh||''}</span>${desc?'<span class="ex-arrow">▸</span>':''}</summary>${desc}</details>`;}).join('')+`</div>`;
   }
   // ── Example sentence (textbook sentence flagged) ──
   let sentHtml='';
   if(c.sentence&&c.sentence.en){
     const s=c.sentence;const hl=s.en.replace(new RegExp('('+c.term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','i'),'<b class="sc-sent-hl">$1</b>');
-    sentHtml=`<div class="sc-sec-lbl">Example Sentence · 例句 ${s.src==='textbook'?'<span class="sc-src">Textbook</span>':''}</div><div class="sc-sent"><button class="sc-ex-audio" title="Pronounce" onclick="speak(${JSON.stringify(s.en)})">🔊</button><div><div class="sc-sent-en">${hl}</div>${s.zh?`<div class="sc-sent-zh">${s.zh}</div>`:''}</div></div>`;
+    sentHtml=`<div class="sc-sec-lbl">Example Sentence · 例句 ${s.src==='textbook'?'<span class="sc-src">Textbook</span>':''}</div><div class="sc-sent"><button class="sc-ex-audio" title="Pronounce" onclick="speak(${jsq(s.en)})">🔊</button><div><div class="sc-sent-en">${hl}</div>${s.zh?`<div class="sc-sent-zh">${s.zh}</div>`:''}</div></div>`;
   }
   document.getElementById('study-card').innerHTML=`
     <div class="sc-head">
       <span class="sc-type ${typeColor[c.type]||'type-abbr'}">${c.grp?c.grp.split(' ').slice(-1)[0]+' · ':''}${c.typeLbl}</span>
       <span class="sc-head-r"><button class="sc-starbtn${isStar(cardUid(c),c.term)?' on':''}" onclick='toggleStudyStar(${JSON.stringify(cardUid(c))},${JSON.stringify(c.term)},this)' title="Mark as difficult / unmark">${isStar(cardUid(c),c.term)?'★ Difficult':'☆ Mark difficult'}</button>
-      <button class="sc-audio" onclick="speak(${JSON.stringify(speakTerm)})">🔊 Listen</button></span>
+      <button class="sc-audio" onclick="speak(${jsq(speakTerm)})">🔊 Listen</button></span>
     </div>
     <div class="sc-body">
       <div class="sc-term">${c.term}${c.abbr?`<span class="sc-abbr" title="Abbreviation · 縮寫">${c.abbr}</span>`:''}</div>
