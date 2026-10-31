@@ -61,7 +61,8 @@ function doPost(e) {
     if (!req.record || typeof req.record !== 'object') return out_({ ok: false, error: 'bad_request' });
     const json = JSON.stringify(req.record);
     if (json.length > 45000) return out_({ ok: false, error: 'too_large' });
-    saveRecord_(who, req.record, json);
+    // Only students who have linked a Student ID + name are recorded; others use the page as guests.
+    if (!saveRecord_(who, req.record, json)) return out_({ ok: false, error: 'no_profile' });
     return out_({ ok: true });
   }
   if (req.action === 'all') {
@@ -141,27 +142,15 @@ function rowValues_(who, r, json, keep) {
 }
 
 function saveRecord_(who, record, json) {
-  // Each student only ever writes their own row, so updates run in parallel without a lock;
-  // only creating a new row is serialized (so two first saves can't create duplicate rows).
+  // The row is created when the student links their Student ID (bindProfile_), so saves only update it.
   const sh = sheet_();
-  let row = findRow_(sh, who.email);
-  if (row) {
-    const keep = { sid: sh.getRange(row, 2).getValue(), name: sh.getRange(row, 3).getValue() };
-    const vals = rowValues_(who, record, json, keep);
-    sh.getRange(row, 1, 1, vals.length).setValues([vals]);
-    return;
-  }
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
-  try {
-    row = findRow_(sh, who.email);
-    const keep = row ? { sid: sh.getRange(row, 2).getValue(), name: sh.getRange(row, 3).getValue() } : {};
-    const vals = rowValues_(who, record, json, keep);
-    if (row) sh.getRange(row, 1, 1, vals.length).setValues([vals]);
-    else sh.appendRow(vals);
-  } finally {
-    lock.releaseLock();
-  }
+  const row = findRow_(sh, who.email);
+  if (!row) return false;
+  const keep = { sid: sh.getRange(row, 2).getValue(), name: sh.getRange(row, 3).getValue() };
+  if (!String(keep.sid).trim()) return false;
+  const vals = rowValues_(who, record, json, keep);
+  sh.getRange(row, 1, 1, vals.length).setValues([vals]);
+  return true;
 }
 
 function getRow_(email) {
