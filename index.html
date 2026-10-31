@@ -249,6 +249,45 @@ details.sc-ex[open] .ex-arrow{transform:rotate(90deg);color:var(--teal)}
 /* separate tab container */
 .tab-row{margin-bottom:12px}
 .grp-tabs{display:flex;flex-wrap:wrap;margin-bottom:4px;padding-bottom:8px;border-bottom:1px solid var(--bdr)}.gtab{font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1.5px solid var(--bdr);background:var(--card);color:var(--fg2);cursor:pointer;margin:0 6px 6px 0}.gtab.active{background:var(--fg);border-color:var(--fg);color:var(--card)}
+.adv-entry:hover{border-color:#7C3AED}.ai-entry{border-color:#C4B5FD}.ai-entry:hover{border-color:#7C3AED}
+.adv-quota{font-size:12px;color:var(--fg3);white-space:nowrap}
+.sc-aibtn{color:#6D28D9;border-color:#C4B5FD}.sc-aibtn:hover{color:#5B21B6;border-color:#7C3AED}
+:root[data-theme="dark"] .sc-aibtn,:root[data-theme="dark"] .ai-term,:root[data-theme="dark"] .al-f{color:#C4B5FD}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .sc-aibtn,:root:not([data-theme="light"]) .ai-term,:root:not([data-theme="light"]) .al-f{color:#C4B5FD}}
+.tu-ctx{font-size:13px;color:var(--fg2);background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tu-log{display:flex;flex-direction:column;gap:10px;margin:12px 0;min-height:120px}
+.tu-msg{max-width:92%;padding:10px 14px;border-radius:14px;font-size:14.5px;line-height:1.65;overflow-wrap:anywhere}
+.tu-me{align-self:flex-end;background:var(--navy);color:#fff;border-bottom-right-radius:4px;white-space:pre-wrap}
+:root[data-theme="dark"] .tu-me{background:#1B3A5C}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tu-me{background:#1B3A5C}}
+.tu-ai{align-self:flex-start;background:var(--card);border:1px solid var(--bdr);border-bottom-left-radius:4px}
+.tu-wait{color:var(--fg3);font-style:italic}.tu-err{color:var(--red)}
+.tu-note{font-size:11.5px;color:var(--fg3);text-align:center}
+.ai-en{color:var(--fg)}.ai-zh{color:var(--fg2);font-size:13.5px;margin-bottom:6px}
+.ai-li{padding-left:14px;position:relative}.ai-en.ai-li::before{content:"•";position:absolute;left:2px;color:var(--fg3)}
+.ai-term{font:inherit;background:none;border:0;padding:0;color:#6D28D9;text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.tu-form{display:flex;gap:8px;align-items:flex-end;position:sticky;bottom:0;background:var(--bg);padding:8px 0 calc(8px + env(safe-area-inset-bottom,0px))}
+.tu-form .sbtn{flex:0 0 auto;width:auto;padding-inline:20px}.tu-form textarea{flex:1;min-width:0;resize:vertical;min-height:44px;max-height:160px;font:inherit;font-size:16px}
+.ai-mini-card{text-align:left;max-width:440px}.ai-mini-u{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fg3)}
+.ai-mini-t{font-size:28px;font-weight:800;margin:4px 0;overflow-wrap:break-word}.ai-mini-m{font-size:15px;font-weight:600;margin-top:6px}.ai-mini-zh{color:var(--fg2);margin-top:2px}
+.ch-go{width:100%;margin-top:14px}
+.ch-note{background:var(--card);border:1px solid var(--bdr);border-left:4px solid #7C3AED;border-radius:var(--r);padding:16px 18px;font:15px/1.9 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin-top:16px;overflow-wrap:anywhere}
+.ch-ab{background:rgba(124,58,237,.14);color:inherit;border-radius:4px;padding:1px 3px;font-weight:700}.ch-ab sup{font-size:10px;color:#7C3AED;margin-left:1px}
+.ch-ab.ok{background:rgba(11,138,110,.18)}.ch-ab.bad{background:rgba(193,60,48,.18)}
+.ch-form{display:flex;flex-direction:column;gap:8px}
+.ch-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:8px 12px;flex-wrap:wrap}
+.ch-n{width:22px;height:22px;border-radius:50%;background:#7C3AED;color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.ch-a{font-family:ui-monospace,Menlo,Consolas,monospace;min-width:64px}.ch-in{flex:1;min-width:180px;margin:0;font-size:16px}
+.ch-res.ok{border-color:var(--green)}.ch-res.bad{border-color:var(--red)}.ch-ans{flex:1;min-width:0;font-size:14px}
+.ch-res.ok .ch-ans>div:first-child{color:var(--green)}.ch-res.bad .ch-ans>div:first-child{color:var(--red)}.ch-you{color:var(--fg)}
+.ch-cor{margin-top:2px}.ch-zh{color:var(--fg2);margin-left:6px}
+.ch-score{font-weight:700;margin:12px 0}.ch-danger{margin-top:14px;padding:12px 14px;border-radius:10px;background:rgba(217,137,10,.12);border:1px solid var(--amber);font-size:13.5px;line-height:1.6;display:flex;flex-direction:column;gap:6px}
+.ch-exp{margin-top:14px}.ch-exp-box{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px}
+.ch-exp-h{font-weight:700;margin-bottom:8px}
+.al-ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.al-ctrl input[type=search]{flex:1;min-width:180px;margin:0}
+.al-row{background:var(--card);border:1px solid var(--bdr);border-radius:10px;margin-bottom:8px}.al-row summary{cursor:pointer;padding:10px 14px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;list-style:none}
+.al-who{font-weight:700}.al-f{font-size:12px;color:#6D28D9}.al-t{font-size:12px;color:var(--fg3);margin-left:auto}.al-q{flex-basis:100%;font-size:13px;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.al-body{padding:0 14px 12px}.al-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--fg3);margin-top:8px}.al-pre{white-space:pre-wrap;font-size:13.5px;line-height:1.6;overflow-wrap:anywhere}
 </style>
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -290,6 +329,30 @@ details.sc-ex[open] .ex-arrow{transform:rotate(90deg);color:var(--teal)}
   <div id="fb" hidden></div>
   <button class="nextbtn" id="nextbtn" hidden onclick="nextQ()"><span id="nextlbl">Next →</span></button>
 </div>
+<div id="s-adv" hidden>
+  <div class="topnav"><button class="backbtn" onclick="goHome()">←</button><div class="navinfo"><div class="navlbl">Advanced Practice · 進階學習</div></div><span class="adv-quota" id="adv-quota"></span></div>
+  <p class="qs-hint" style="margin:0 0 14px">AI-powered practice. Answers are generated by Claude AI and may contain mistakes. Your questions and answers are recorded so your teacher can review them. · 由 Claude AI 產生，可能出錯；你的提問與作答會被記錄，供老師查看。</p>
+  <div id="adv-list" class="top-entries" style="grid-template-columns:1fr"></div>
+</div>
+<div id="s-tutor" hidden>
+  <div class="topnav"><button class="backbtn" onclick="aiOpen()">←</button><div class="navinfo"><div class="navlbl">Ask the Tutor · 隨問小老師</div></div><span class="adv-quota" id="tu-quota"></span></div>
+  <div class="tu-ctx" id="tu-ctx"></div>
+  <div class="qs-chips" id="tu-quick"></div>
+  <div class="tu-log" id="tu-log"></div>
+  <form class="tu-form" onsubmit="tutorSubmit(event)"><textarea id="tu-q" class="qs-sel" rows="2" maxlength="600" placeholder="Type your question… · 輸入你的問題" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){event.preventDefault();tutorSubmit(event)}"></textarea><button class="sbtn sbtn-next" id="tu-send" type="submit">Send</button></form>
+</div>
+<div id="s-chart" hidden>
+  <div class="topnav"><button class="backbtn" onclick="aiOpen()">←</button><div class="navinfo"><div class="navlbl">Chart Reader · 病歷縮寫解讀</div></div><span class="adv-quota" id="ch-quota"></span></div>
+  <div id="ch-setup"></div>
+  <div id="ch-work"></div>
+</div>
+<div id="s-ailog" hidden>
+  <div class="topnav"><button class="backbtn" onclick="aiOpen()">←</button><div class="navinfo"><div class="navlbl">Student AI Log · 學生提問紀錄</div></div><div class="navnum" id="al-num"></div><button class="sc-audio" style="margin:0" onclick="aiLogOpen()">↻</button></div>
+  <div class="al-ctrl"><input id="al-q" class="qs-sel" type="search" placeholder="Search name, student ID, text…" oninput="aiLogRender()"><label class="qs-hint" style="margin:0"><input type="checkbox" id="al-stu" checked onchange="aiLogRender()"> Students only</label></div>
+  <p class="qs-hint" style="margin:0 0 12px">Latest 300 entries. The full log is in the "AI Log" tab of your Google Sheet.</p>
+  <div id="al-list"></div>
+</div>
+<div class="gate" id="ai-mini" hidden onclick="if(event.target===this)aiMiniClose()"><div class="gate-card ai-mini-card"></div></div>
 <div class="gate" id="gate" hidden><div class="gate-card"><div style="font-size:40px">🏥</div><h2>MedLingo</h2><p>Sign in with your school Google account to start.<br>Your progress is saved to your account.</p><div id="gate-btn"></div></div></div>
 <div class="gate" id="pf" hidden><form class="gate-card pf-card" onsubmit="profileSubmit(event)">
   <h2>Student ID · 學號</h2><p>Link your Google account <b id="pf-email"></b> to your student record. This is done once — ask your teacher if you need to change it later.</p><p class="pf-note">Signing in requires your student ID and name. Without them you can still use MedLingo as a guest, but your progress stays on this device only.</p>
@@ -3873,7 +3936,7 @@ function renderStudyCard(){
     <div class="sc-head">
       <span class="sc-type ${typeColor[c.type]||'type-abbr'}">${c.grp?c.grp.split(' ').slice(-1)[0]+' · ':''}${c.typeLbl}</span>
       <span class="sc-head-r"><button class="sc-starbtn${isStar(cardUid(c),c.term)?' on':''}" onclick="toggleStudyStar(${jsq(cardUid(c))},${jsq(c.term)},this)" title="Mark as difficult / unmark">${isStar(cardUid(c),c.term)?'★ Difficult':'☆ Mark difficult'}</button>
-      <button class="sc-audio" onclick="speak(${jsq(speakTerm)})">🔊 Listen</button></span>
+      <button class="sc-audio" onclick="speak(${jsq(speakTerm)})">🔊 Listen</button>${AI.enabled?'<button class="sc-audio sc-aibtn" onclick="tutorFromCard()">💬 Ask AI</button>':''}</span>
     </div>
     <div class="sc-body">
       <div class="sc-term">${c.term}${c.abbr?`<span class="sc-abbr" title="Abbreviation · 縮寫">${c.abbr}</span>`:''}</div>
@@ -4025,8 +4088,287 @@ const CONFIG={
   GOOGLE_CLIENT_ID:'159350431685-s7095o51b6o2dvfmci9obo28v67iai65.apps.googleusercontent.com',   // Google Cloud OAuth client ID, e.g. 1234567890-abc123.apps.googleusercontent.com
   SCRIPT_URL:'https://script.google.com/macros/s/AKfycby1MVAtLQqmMeLzzD92ewk6M3s6GBdL6cR8B8FLzSER6Sn7Crk1ZA5OU66DLdMozu5gmA/exec',         // Apps Script web-app URL, ends with /exec
   REQUIRE_SIGN_IN:false, // true = students must sign in before using the page
+  AI_URL:'https://script.google.com/macros/s/AKfycbxFAVB9z8fEvcR_wnKT7TQGFSIHwlQdXZZzyKdJnmDmBXoNqnjDFq0w44kgsPyT3EIZ-A/exec',             // Advanced Practice (Claude AI) backend: the AI Apps Script web-app URL. Empty = section hidden.
 };
 const ONLINE=!!(CONFIG.GOOGLE_CLIENT_ID&&CONFIG.SCRIPT_URL);
+
+// ═══════════════════ Advanced Practice · 進階學習 (Claude AI, separate backend) ═══════════════════
+// Shown only when CONFIG.AI_URL is set AND the AI backend says this signed-in user may use it.
+// Nothing here runs for guests, and the rest of MedLingo never depends on it.
+const AI={enabled:false,teacher:false,limit:0,used:0,busy:false,chat:[],card:null,chart:null,recent:[]};
+const aiEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function aiApi(body){
+  if(!CONFIG.AI_URL||!tokenValid())throw new Error('auth');
+  const r=await fetch(CONFIG.AI_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...body,token:TR.token})});
+  return r.json();
+}
+async function aiHello(){
+  AI.enabled=false;
+  if(!CONFIG.AI_URL||TR.state!=='in')return;
+  try{const r=await aiApi({action:'hello'});if(r.ok&&r.enabled){AI.enabled=true;AI.teacher=!!r.teacher;AI.limit=r.limit||0;AI.used=r.used||0;}}catch(e){}
+  aiRefreshUI();
+}
+function aiRefreshUI(){
+  if(!document.getElementById('s-home').hidden)renderHome();
+  if(!document.getElementById('s-study').hidden)renderStudyCard();
+}
+function aiQuota(){return AI.limit?`${Math.max(0,AI.limit-AI.used)} / ${AI.limit} AI uses left today`:'Teacher · unlimited';}
+function aiErr(r){
+  const m={limit:`You have used all ${AI.limit} AI uses for today. Come back tomorrow! · 今天的 AI 使用次數已用完，明天再來！`,
+    no_key:'The AI is not set up yet (no API key). Please tell your teacher. · AI 尚未設定完成，請告訴老師。',
+    auth:'Your sign-in expired — go back and sign in again. · 登入已過期，請重新登入。',
+    too_long:'Please keep your question under 600 characters. · 問題請在 600 字以內。',
+    ai_format:'The AI gave an unusable answer. Please try again. · AI 回覆格式有誤，請再試一次。',
+    ai_error:'The AI service is busy or unavailable. Please try again in a moment. · AI 服務忙碌中，請稍後再試。'};
+  return m[r&&r.error]||'Something went wrong. Please try again. · 發生錯誤，請再試一次。';
+}
+function aiOpen(){showS('adv');window.scrollTo(0,0);aiRenderAdv();}
+function aiRenderAdv(){
+  document.getElementById('adv-quota').textContent=aiQuota();
+  document.getElementById('adv-list').innerHTML=`
+    <button class="mix-entry adv-entry" onclick="tutorOpen(null)"><span class="mix-ico">💬</span><span><b>Ask the Tutor · 隨問小老師</b><small>Ask anything about medical English — meanings, differences, word parts, clinical use</small></span><span class="mix-arr">→</span></button>
+    <button class="mix-entry adv-entry" onclick="chartOpen()"><span class="mix-ico">📋</span><span><b>Chart Reader · 病歷縮寫解讀</b><small>Read a realistic chart note, spell out each abbreviation, then get an AI explanation</small></span><span class="mix-arr">→</span></button>
+    ${AI.teacher?`<button class="mix-entry adv-entry td-entry" onclick="aiLogOpen()"><span class="mix-ico">🗂️</span><span><b>Student AI Log · 學生提問紀錄</b><small>What students asked and what the AI answered — teacher only</small></span><span class="mix-arr">→</span></button>`:''}`;
+}
+
+// ── course term index (to link course words inside AI answers) ──
+let AI_IDX=null;
+function aiIndex(){
+  if(AI_IDX)return AI_IDX;
+  const map=new Map();
+  UNITS.forEach(u=>u.cards.forEach((c,i)=>{if(u.id===1)return;
+    String(c.term).split(/\s*\/\s*/).forEach(t=>{t=t.replace(/\s*\(.*?\)\s*/g,' ').trim().toLowerCase();if(t.length>=5&&/^[a-z][a-z \-']+$/.test(t)&&!map.has(t))map.set(t,[u.id,i]);});}));
+  const keys=[...map.keys()].sort((a,b)=>b.length-a.length);
+  AI_IDX={map,re:keys.length?new RegExp('\\b('+keys.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\b','gi'):null};
+  return AI_IDX;
+}
+function aiFormat(text){
+  const idx=aiIndex();let links=0;const seen=new Set();
+  return String(text).split('\n').map(line=>{
+    if(!line.trim())return '';
+    const cjk=/[\u3400-\u9fff]/.test(line)&&!/[a-z]{4,}.*[a-z]{4,}.*[a-z]{4,}/i.test(line.replace(/[\u3400-\u9fff]/g,''));
+    let h=aiEsc(line);
+    if(!cjk&&idx.re)h=h.replace(idx.re,(m)=>{const k=m.toLowerCase();if(seen.has(k)||links>=10)return m;const ref=idx.map.get(k);if(!ref)return m;seen.add(k);links++;return `<button class="ai-term" onclick="aiMini(${ref[0]},${ref[1]})">${m}</button>`;});
+    const bullet=/^\s*[-•]\s+/.test(line);
+    return `<div class="${cjk?'ai-zh':'ai-en'}${bullet?' ai-li':''}">${h.replace(/^\s*[-•]\s+/,'')}</div>`;
+  }).join('');
+}
+function aiMini(uid,i){
+  const u=UNITS.find(x=>x.id===uid),c=u&&u.cards[i];if(!c)return;
+  const m=document.getElementById('ai-mini');m.hidden=false;
+  m.querySelector('.ai-mini-card').innerHTML=`<div class="ai-mini-u">${aiEsc(u.title)} · ${aiEsc(c.typeLbl||'')}</div>
+    <div class="ai-mini-t">${aiEsc(c.term)}${c.abbr?` <span class="sc-abbr">${aiEsc(c.abbr)}</span>`:''}</div>
+    <div class="sc-pron">${aiEsc(c.pron||'')}</div><div class="ai-mini-m">${aiEsc(c.meaning||'')}</div><div class="ai-mini-zh">${aiEsc(c.zh||'')}</div>
+    <div class="pf-btns" style="justify-content:flex-start;flex-wrap:wrap;margin-top:14px">
+      <button class="sc-audio" onclick="speak(${jsq(c.term)})">🔊 Listen</button>
+      <button class="sc-audio" onclick="aiMiniClose();aiOpenCard(${uid},${i})">Open card</button>
+      <button class="sc-audio" onclick="aiMiniClose();tutorOpen({uid:${uid},i:${i}})">💬 Ask AI</button>
+      <button class="sc-audio" style="margin-left:auto" onclick="aiMiniClose()">Close</button></div>`;
+}
+function aiMiniClose(){document.getElementById('ai-mini').hidden=true;}
+function aiOpenCard(uid,i){markSeen(uid);cur={uid,si:i,qi:0,ans:[],fb:false,_qs:null,_label:'',typeFilter:null,grpFilter:null};showS('study');window.scrollTo(0,0);renderStudyCard();}
+
+// ── Ask the Tutor ──
+function aiCardRef(c){const uid=cardUid(c);const u=UNITS.find(x=>x.id===uid);return u?{uid,i:u.cards.indexOf(u.cards.find(x=>x.term===c.term&&x.zh===c.zh)||c)}:null;}
+function tutorFromCard(){const cards=studyCards();const c=cards[cur.si];if(!c)return;tutorOpen(aiCardRef(c));}
+function tutorOpen(ref){
+  if(!AI.enabled)return;
+  let card=null;
+  if(ref){const u=UNITS.find(x=>x.id===ref.uid);const c=u&&u.cards[ref.i];if(c)card={term:c.term,abbr:c.abbr||'',zh:c.zh||'',meaning:c.meaning||'',unit:`${u.title} · ${u.zh}`,section:c.typeLbl||'',ref};}
+  if(!card||!AI.card||AI.card.term!==card.term){AI.chat=[];}
+  AI.card=card;showS('tutor');window.scrollTo(0,0);tutorRender();
+  setTimeout(()=>document.getElementById('tu-q').focus(),60);
+}
+function tutorQuick(){
+  const t=AI.card?AI.card.term:null;
+  const qs=t?[`What does "${t}" mean, and how is it used clinically? Give one example sentence.`,`How is "${t}" different from similar terms?`,`Break "${t}" into word parts.`,`Any tips to remember "${t}"?`]
+    :['What is the difference between hypo- and hyper-?','When do nurses write NPO?','How do I pronounce "dyspnea"?','Dysphagia vs dysphasia?'];
+  const lbl=t?['Meaning & use','vs similar terms','Word parts','Memory tip']:qs;
+  return qs.map((q,i)=>`<button class="qs-chip" onclick="tutorAsk(${jsq(q)})">${aiEsc(lbl[i])}</button>`).join('');
+}
+function tutorRender(){
+  document.getElementById('tu-quota').textContent=aiQuota();
+  document.getElementById('tu-ctx').innerHTML=AI.card?`About: <b>${aiEsc(AI.card.term)}</b>${AI.card.zh?' · '+aiEsc(AI.card.zh):''} <button class="nt-x" title="Ask without this word" onclick="AI.card=null;AI.chat=[];tutorRender()">✕</button>`:'Ask anything about medical English for this course · 問任何課程相關的醫學英文問題';
+  document.getElementById('tu-quick').innerHTML=tutorQuick();
+  const log=document.getElementById('tu-log');
+  log.innerHTML=AI.chat.length?AI.chat.map(m=>m.role==='user'?`<div class="tu-msg tu-me">${aiEsc(m.content)}</div>`:`<div class="tu-msg tu-ai${m.err?' tu-err':''}">${m.err?aiEsc(m.content):aiFormat(m.content)}</div>`).join('')+(AI.busy?'<div class="tu-msg tu-ai tu-wait">Thinking… · 思考中…</div>':'')+(AI.chat.some(m=>m.role==='assistant'&&!m.err)?'<div class="tu-note">AI can make mistakes — check with your textbook and teacher. · AI 可能出錯，請以課本和老師說明為準。</div>':'')
+    :`<div class="nt-empty">Pick a quick question above or type your own. · 點上方的快速提問，或自己輸入問題。</div>`;
+  log.scrollTop=log.scrollHeight;
+  document.getElementById('tu-send').disabled=AI.busy;
+}
+async function tutorAsk(q){
+  q=String(q||'').trim();if(!q||AI.busy)return;
+  if(q.length>600){AI.chat.push({role:'user',content:q.slice(0,80)+'…'},{role:'assistant',content:aiErr({error:'too_long'}),err:true});tutorRender();return;}
+  AI.chat.push({role:'user',content:q});AI.busy=true;tutorRender();
+  const msgs=AI.chat.filter(m=>!m.err).slice(-8).map(m=>({role:m.role,content:m.content}));
+  try{
+    const card=AI.card?{term:AI.card.term,abbr:AI.card.abbr,zh:AI.card.zh,meaning:AI.card.meaning,unit:AI.card.unit,section:AI.card.section}:null;
+    const r=await aiApi({action:'ask',messages:msgs,card});
+    if(r.ok){AI.chat.push({role:'assistant',content:r.answer});AI.used=r.used||AI.used;}
+    else{AI.chat.pop();AI.chat.push({role:'user',content:q},{role:'assistant',content:aiErr(r),err:true});if(r.used!=null)AI.used=r.used;}
+  }catch(e){AI.chat.push({role:'assistant',content:aiErr({error:'ai_error'}),err:true});}
+  AI.busy=false;tutorRender();
+}
+function tutorSubmit(ev){ev.preventDefault();const el=document.getElementById('tu-q');const q=el.value;el.value='';tutorAsk(q);}
+
+// ── Chart Reader ──
+const CHART_TOPICS=[
+  {k:'gen',label:'General ward · 一般病房',units:[],topic:'general medical-surgical ward'},
+  {k:'im',label:'Internal Medicine · 內科',units:[4],topic:'internal medicine ward'},
+  {k:'su',label:'Surgery · 外科',units:[5],topic:'general surgery ward (pre- and post-operative care)'},
+  {k:'ob',label:'OB/GYN · 婦產科',units:[6],topic:'obstetrics and gynecology ward / delivery room'},
+  {k:'pe',label:'Pediatrics · 兒科',units:[7],topic:'pediatric ward'},
+  {k:'ps',label:'Psychiatry · 精神科',units:[8],topic:'psychiatric ward'},
+  {k:'ot',label:'Other specialties · 其他專科',units:[9],topic:'neurology, orthopedics, ENT or ophthalmology ward'},
+];
+const CHART_CORE_SKIP=new Set(['Organizations 相關組織','Units 相關單位','Nutrients 營養素用語','Biochemistry 營養素生化用語']);
+const CHART_UNITS_OK=['mg','ml','kg','cm','mmhg','bpm','spo2','g','mcg','l','c'];
+const DANGER=[
+  {re:/(^|[\s(])(q\.?d\.?|QD)(?=[\s,.;)]|$)/i,txt:'q.d. (every day) is easily misread as q.i.d. (4 times a day). Write "daily". · q.d. 容易被看成 q.i.d.（一天四次），應寫 daily。'},
+  {re:/(^|[\s(])(q\.?o\.?d\.?|QOD)(?=[\s,.;)]|$)/i,txt:'q.o.d. (every other day) can be misread as q.d. or q.i.d. Write "every other day". · q.o.d. 易與 q.d.、q.i.d. 混淆，應寫 every other day。'},
+  {re:/\d\s?(U|IU)\b/,txt:'"U" / "IU" (units) can be misread as 0, 4 or IV. Write "units". · U、IU 可能被看成 0、4 或 IV，應寫 units。'},
+  {re:/\b(cc)\b/,txt:'"cc" can be misread as "u" (units). Write "mL". · cc 可能被看成 u（單位），應寫 mL。'},
+  {re:/(^|[\s(])(h\.s\.|HS)(?=[\s,.;)]|$)/,txt:'h.s. can mean "bedtime" or "half-strength". Write it out. · h.s. 可指睡前或半強度，應寫清楚。'},
+  {re:/(^|[\s(])(A\.?D\.?|A\.?S\.?|A\.?U\.?)(?=[\s,.;)]|$)/,txt:'AD / AS / AU (right / left / both ears) are easily confused with OD / OS / OU (eyes). Write "right ear" etc. · AD/AS/AU（耳）易與 OD/OS/OU（眼）混淆，應寫 right ear 等。'},
+  {re:/(^|[\s(])(D\/C)(?=[\s,.;)]|$)/,txt:'D/C can mean "discharge" or "discontinue". Write it out. · D/C 可指出院或停藥，應寫清楚。'},
+  {re:/\b(MSO4|MgSO4|MS)\b/,txt:'MS / MSO4 (morphine) and MgSO4 (magnesium sulfate) are easily confused. Write the full drug name. · MS、MSO4（嗎啡）與 MgSO4（硫酸鎂）易混淆，應寫全名。'},
+  {re:/\d\.0\s?(mg|mL|g)\b/,txt:'Trailing zero (e.g. 1.0 mg) can be misread as 10 mg. Write "1 mg". · 小數點後多餘的 0（1.0 mg）可能被看成 10 mg。'},
+];
+const abN=s=>String(s).toLowerCase().replace(/[.\s]/g,'');
+let CH_IDX=null;
+function chartIndex(){
+  if(CH_IDX)return CH_IDX;
+  const all=new Map();
+  UNITS.forEach(u=>u.cards.forEach((c,i)=>{if(!c.abbr)return;String(c.abbr).split(/\s*[;,]\s*|\s+\/\s+/).forEach(a=>{a=a.trim();if(!a)return;const k=abN(a);
+    let e=all.get(k);if(!e){e={a,k,items:[]};all.set(k,e);}e.items.push({uid:u.id,i,term:c.term,zh:c.zh||'',type:c.typeLbl||''});});}));
+  CH_IDX={all};return CH_IDX;
+}
+function chartPool(topic){
+  const {all}=chartIndex();const spec=[],core=[];
+  for(const e of all.values()){
+    const isSpec=e.items.some(x=>topic.units.includes(x.uid));
+    const isCore=e.items.some(x=>(x.uid===2&&!CHART_CORE_SKIP.has(x.type))||(x.uid===3&&!CHART_CORE_SKIP.has(x.type)));
+    if(/\s/.test(e.a))continue;
+    if(isSpec)spec.push(e);else if(isCore)core.push(e);
+  }
+  const pick=(arr,n)=>shuffle(arr.slice()).slice(0,n);
+  return [...pick(spec,120),...pick(core,220-Math.min(spec.length,120))];
+}
+function chartOpen(){
+  showS('chart');window.scrollTo(0,0);
+  if(!AI.chartCfg)AI.chartCfg={topic:'gen',level:'easy'};
+  chartRenderSetup();
+}
+function chartRenderSetup(){
+  const cfg=AI.chartCfg;
+  document.getElementById('ch-quota').textContent=aiQuota();
+  document.getElementById('ch-setup').innerHTML=`
+    <div class="qs-lbl">Specialty · 科別</div><div class="qs-chips">${CHART_TOPICS.map(t=>`<button class="qs-chip${cfg.topic===t.k?' on':''}" onclick="AI.chartCfg.topic='${t.k}';chartRenderSetup()">${aiEsc(t.label)}</button>`).join('')}</div>
+    <div class="qs-lbl">Level · 難度</div><div class="qs-chips">${[['easy','Easy · 初級 (≈3)'],['medium','Medium · 中級 (≈5)'],['hard','Hard · 高級 (8+)']].map(([k,l])=>`<button class="qs-chip${cfg.level===k?' on':''}" onclick="AI.chartCfg.level='${k}';chartRenderSetup()">${l}</button>`).join('')}</div>
+    <button class="sbtn sbtn-next ch-go" id="ch-go" onclick="chartNew()" ${AI.busy?'disabled':''}>${AI.busy?'Writing a chart note… · 產生中…':'📋 New chart note · 產生病歷'}</button>`;
+}
+function chartScan(note){
+  const {all}=chartIndex();const found=[],unknown=[];const seen=new Set();
+  const toks=note.split(/[\s,;:()\[\]"]+/);
+  for(let t of toks){
+    t=t.replace(/^['"]+|['"]+$/g,'');if(!t)continue;
+    const caps=(t.match(/[A-Z]/g)||[]).length;
+    const cand=caps>=2||/^([a-zA-Z]{1,3}\.){2,}$/.test(t)||/^[A-Za-z]{1,4}\/[A-Za-z]{1,4}\.?$/.test(t)||/^[A-Z][a-z]{0,3}\.$/.test(t);
+    if(!cand)continue;
+    let k=abN(t);const raw=k;k=k.replace(/\d+$/,'');
+    if(all.has(raw))k=raw;
+    if(all.has(k)){if(!seen.has(k)){seen.add(k);const e=all.get(k);const shown=note.includes(e.a)?e.a:(e.a.endsWith('.')?t:t.replace(/\.$/,''));found.push({...e,shown});}}
+    else if(!CHART_UNITS_OK.includes(raw)&&!/^\d/.test(raw)&&!/^[A-Z][a-z]+\.$/.test(t)&&caps>=2)unknown.push(t);
+  }
+  return {found,unknown};
+}
+async function chartNew(){
+  if(AI.busy)return;AI.busy=true;chartRenderSetup();
+  const box=document.getElementById('ch-work');box.innerHTML='';
+  const topic=CHART_TOPICS.find(t=>t.k===AI.chartCfg.topic)||CHART_TOPICS[0];
+  let res=null,err=null;
+  for(let attempt=0;attempt<3&&!res;attempt++){
+    const pool=chartPool(topic);
+    try{
+      const r=await aiApi({action:'chart',topic:topic.topic,level:AI.chartCfg.level,abbrs:pool.map(e=>({a:e.a,t:e.items[0].term})),avoid:AI.recent});
+      if(r.used!=null)AI.used=r.used;
+      if(!r.ok){err=r;if(['limit','no_key','auth'].includes(r.error))break;continue;}
+      const sc=chartScan(r.note);
+      if(sc.unknown.length===0&&sc.found.length>=2)res={note:r.note,items:sc.found};
+      else err={error:'ai_format'};
+    }catch(e){err={error:'ai_error'};}
+  }
+  AI.busy=false;chartRenderSetup();
+  if(!res){box.innerHTML=`<div class="nt-empty">${aiEsc(aiErr(err))}</div>`;return;}
+  AI.recent=[...res.items.map(x=>x.a),...AI.recent].slice(0,30);
+  AI.chart={note:res.note,items:res.items,done:false,explain:null};chartRenderWork();
+}
+function chartNoteHtml(note,items,done){
+  let h=aiEsc(note);
+  items.forEach((it,n)=>{const re=new RegExp('(^|[\\s,;:(\\[\"])('+aiEsc(it.shown).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')(?=$|[\\s,;:)\\]\".])','g');
+    h=h.replace(re,(m,a,b)=>`${a}<mark class="ch-ab${done?(it.ok?' ok':' bad'):''}">${b}<sup>${n+1}</sup></mark>`);});
+  return h.replace(/\n/g,'<br>');
+}
+function chartRenderWork(){
+  const C=AI.chart,box=document.getElementById('ch-work');if(!C){box.innerHTML='';return;}
+  const danger=DANGER.filter(d=>d.re.test(C.note));
+  const rows=C.items.map((it,n)=>{
+    const correct=it.items.map(x=>x.term).filter((v,i,a)=>a.indexOf(v)===i);
+    const zh=it.items.map(x=>x.zh).filter((v,i,a)=>v&&a.indexOf(v)===i).join('；');
+    if(!C.done)return `<label class="ch-row"><span class="ch-n">${n+1}</span><b class="ch-a">${aiEsc(it.shown)}</b><input class="qs-sel ch-in" data-n="${n}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Full English term · 完整英文"></label>`;
+    return `<div class="ch-row ch-res ${it.ok?'ok':'bad'}"><span class="ch-n">${n+1}</span><b class="ch-a">${aiEsc(it.shown)}</b><div class="ch-ans">
+      <div>${it.ok?'✓':'✗'} <span class="ch-you">${aiEsc(it.answer||'—')}</span>${it.close?' <small>(spelling · 拼字小誤)</small>':''}</div>
+      <div class="ch-cor">${correct.map(t=>`<button class="ai-term" onclick="aiMini(${it.items.find(x=>x.term===t).uid},${it.items.find(x=>x.term===t).i})">${aiEsc(t)}</button>`).join(' / ')} <span class="ch-zh">${aiEsc(zh)}</span>
+      <button class="sc-ex-audio" title="Pronounce" onclick="speak(${jsq(correct[0])})">🔊</button></div></div></div>`;
+  }).join('');
+  const nOk=C.items.filter(x=>x.ok).length;
+  box.innerHTML=`<div class="ch-note">${chartNoteHtml(C.note,C.items,C.done)}</div>
+    ${C.done?`<div class="ch-score">${nOk} / ${C.items.length} correct${nOk<C.items.length?' — missed words were added to ⭐ My Notes · 答錯的已加入我的筆記':''}</div>`:'<p class="qs-hint" style="margin:10px 0">Write the full English term for each abbreviation. · 寫出每個縮寫的完整英文。</p>'}
+    <form class="ch-form" onsubmit="chartCheck(event)">${rows}
+    ${C.done?'':'<button class="sbtn sbtn-next ch-go" type="submit">Check answers · 對答案</button>'}</form>
+    ${C.done&&danger.length?`<div class="ch-danger"><b>⚠️ Error-prone abbreviation · 易出錯的縮寫</b>${danger.map(d=>`<div>${aiEsc(d.txt)}</div>`).join('')}</div>`:''}
+    ${C.done?`<div class="ch-exp">${C.explain?`<div class="ch-exp-box"><div class="ch-exp-h">🤖 AI explanation · AI 整段解說</div>${C.explain.err?`<div class="tu-err">${aiEsc(C.explain.text)}</div>`:aiFormat(C.explain.text)}<div class="tu-note">AI can make mistakes — check with your textbook and teacher. · AI 可能出錯，請以課本和老師說明為準。</div></div>`
+      :`<button class="sbtn ch-go" onclick="chartExplain()" ${AI.busy?'disabled':''}>${AI.busy?'Explaining… · 解說中…':'🤖 AI explanation of the whole note · AI 整段解說'}</button>`}</div>
+      <div class="study-btns" style="margin-top:14px"><button class="sbtn sbtn-next" onclick="chartNew()">📋 Next chart note · 下一題</button></div>`:''}`;
+  if(!C.done){const f=box.querySelector('.ch-in');if(f)setTimeout(()=>f.focus(),50);}
+}
+function chNorm(s){return String(s).toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');}
+function chVariants(term){const out=new Set();String(term).split(/\s*\/\s*|\s*;\s*/).forEach(v=>{const noPar=v.replace(/\s*\(.*?\)\s*/g,' ');out.add(chNorm(v));out.add(chNorm(noPar));(v.match(/\((.*?)\)/g)||[]).forEach(p=>out.add(chNorm(p)));});out.delete('');return out;}
+function lev1(a,b){if(Math.abs(a.length-b.length)>1)return false;let i=0,j=0,d=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){i++;j++;continue;}if(++d>1)return false;if(a.length>b.length)i++;else if(b.length>a.length)j++;else{i++;j++;}}return d+(a.length-i)+(b.length-j)<=1;}
+function chartCheck(ev){
+  ev.preventDefault();const C=AI.chart;if(!C||C.done)return;
+  document.querySelectorAll('.ch-in').forEach(inp=>{const it=C.items[+inp.dataset.n];it.answer=inp.value.trim();const a=chNorm(it.answer);
+    const vs=new Set();it.items.forEach(x=>chVariants(x.term).forEach(v=>vs.add(v)));
+    it.ok=!!a&&vs.has(a);it.close=false;
+    if(!it.ok&&a.length>=8&&[...vs].some(v=>v.length>=8&&lev1(a,v))){it.ok=true;it.close=true;}
+    if(!it.ok)it.items.forEach(x=>{if(!isStar(x.uid,x.term))setStar(x.uid,x.term,true);});});
+  C.done=true;chartRenderWork();
+}
+async function chartExplain(){
+  const C=AI.chart;if(!C||AI.busy)return;AI.busy=true;chartRenderWork();
+  try{const r=await aiApi({action:'explain',note:C.note,key:C.items.map(it=>({a:it.shown,t:it.items[0].term,zh:it.items[0].zh}))});
+    if(r.used!=null)AI.used=r.used;C.explain=r.ok?{text:r.answer}:{text:aiErr(r),err:true};}
+  catch(e){C.explain={text:aiErr({error:'ai_error'}),err:true};}
+  AI.busy=false;document.getElementById('ch-quota').textContent=aiQuota();chartRenderWork();
+}
+
+// ── Teacher: student AI log ──
+let AILOG=[];
+async function aiLogOpen(){
+  showS('ailog');window.scrollTo(0,0);const box=document.getElementById('al-list');box.innerHTML='<div class="nt-empty">Loading… · 載入中…</div>';
+  try{const r=await aiApi({action:'log',limit:300});if(!r.ok)throw 0;AILOG=r.rows||[];aiLogRender();}
+  catch(e){box.innerHTML=`<div class="nt-empty">${aiEsc(aiErr({error:'ai_error'}))}</div>`;}
+}
+function aiLogRender(){
+  const f=(document.getElementById('al-q').value||'').toLowerCase(),only=document.getElementById('al-stu').checked;
+  const rows=AILOG.filter(r=>(!only||r.role==='Student')&&(!f||(r.name+' '+r.sid+' '+r.input+' '+r.output).toLowerCase().includes(f)));
+  document.getElementById('al-num').textContent=`${rows.length} / ${AILOG.length}`;
+  const box=document.getElementById('al-list');
+  box.innerHTML=rows.length?rows.map((r,i)=>`<details class="al-row"><summary><span class="al-who">${aiEsc(r.name||r.email)}${r.sid?' · '+aiEsc(r.sid):''}</span><span class="al-f">${aiEsc(r.feature)}</span><span class="al-t">${aiEsc(r.time)}</span><div class="al-q">${aiEsc(String(r.input).slice(0,160))}</div></summary>
+    <div class="al-body"><div class="al-lbl">Question / input</div><div class="al-pre">${aiEsc(r.input)}</div><div class="al-lbl">AI answer</div><div class="al-pre">${aiEsc(r.output)}</div></div></details>`).join('')
+    :'<div class="nt-empty">No AI activity yet. · 目前還沒有使用紀錄。</div>';
+}
+
 
 // ───────────── Account + sync (Google sign-in → Apps Script → Google Sheet) ─────────────
 const TR={ref:null,data:null,queue:[],dirty:false,writing:false,timer:null,session:false,teacher:false,token:null,who:null,state:'off',profile:null};
@@ -4078,6 +4420,7 @@ async function onCredential(resp){
   }catch(e){TR.state='error';}
   renderAcct();if(!document.getElementById('s-home').hidden)renderHome();
   if(TR.state==='pending')profileOpen();
+  if(TR.state==='in')aiHello();
 }
 function startSync(record){
   {{
@@ -4093,7 +4436,8 @@ function signOut(){
   try{google.accounts.id.disableAutoSelect();}catch(e){}
   try{sessionStorage.removeItem(PKEY+'_tok');}catch(e){}
   if(TR.dirty)trFlush();
-  Object.assign(TR,{ref:null,data:null,token:null,who:null,teacher:false,state:TR.guest?'guest':'out',session:false,profile:null,pendingRecord:null});document.getElementById('pf').hidden=true;
+  Object.assign(TR,{ref:null,data:null,token:null,who:null,teacher:false,state:TR.guest?'guest':'out',session:false,profile:null,pendingRecord:null});AI.enabled=false;AI.chat=[];AI.card=null;AI.chart=null;
+  if(['adv','tutor','chart','ailog'].some(n=>!document.getElementById('s-'+n).hidden))showS('home');document.getElementById('pf').hidden=true;
   renderAcct();renderHome();
 }
 function renderAcct(){
@@ -4140,7 +4484,7 @@ async function profileSubmit(ev){
   if(!tokenValid()){msg.textContent='Your sign-in expired — close this and sign in again.';return;}
   btn.disabled=true;msg.textContent='Saving…';
   try{const r=await api({action:'profile',sid,name});
-    if(r.ok){TR.profile=r.profile;TR.state='in';document.getElementById('pf').hidden=true;startSync(TR.pendingRecord);TR.pendingRecord=null;renderAcct();if(!document.getElementById('s-home').hidden)renderHome();return;}
+    if(r.ok){TR.profile=r.profile;TR.state='in';document.getElementById('pf').hidden=true;startSync(TR.pendingRecord);TR.pendingRecord=null;renderAcct();if(!document.getElementById('s-home').hidden)renderHome();aiHello();return;}
     msg.textContent={not_in_roster:'This student ID is not on the class list. Check it, or ask your teacher.',name_mismatch:'The name does not match the class list for this student ID.',sid_taken:'This student ID is already linked to another Google account. Ask your teacher.',bad_sid:'Student ID: letters and digits only.',bad_name:'Please enter your name.',auth:'Your sign-in expired — sign in again.'}[r.error]||'Could not save. Please try again.';
   }catch(e){msg.textContent='Could not reach the server. Please try again.';}
   finally{btn.disabled=false;}
@@ -4192,6 +4536,7 @@ function teacherCSV(){
 // ───────────── 首頁最後兩章 Quiz + Notes ─────────────
 function topEntries(){const ns=starCards().length;
   document.getElementById('top-entries').innerHTML=`<button class="mix-entry" onclick="mixSetup()"><span class="mix-ico">🔀</span><span><b>Mixed Quiz · 混合測驗</b><small>Across all units, or only the units you have studied</small></span><span class="mix-arr">→</span></button>
+${AI.enabled?`<button class="mix-entry ai-entry" onclick="aiOpen()"><span class="mix-ico">🤖</span><span><b>Advanced Practice · 進階學習</b><small>AI tutor and chart-reading practice${AI.teacher?' · teacher preview':''}</small></span><span class="mix-arr">→</span></button>`:''}
 ${TR.teacher?`<button class="mix-entry td-entry" onclick="teacherOpen()"><span class="mix-ico">📊</span><span><b>Teacher Dashboard</b><small>Student usage — teacher accounts only</small></span><span class="mix-arr">→</span></button>`:''}
     <button class="mix-entry note-entry" onclick="notesOpen()"><span class="mix-ico">⭐</span><span><b>My Notes · 我的筆記</b><small>${ns?ns+' starred words — review or quiz them':'Words you mark ☆ difficult are collected here'}</small></span><span class="mix-arr">→</span></button>`;}
 function homeExtraCards(){topEntries();
@@ -4410,7 +4755,7 @@ function wrongOnlyQuiz(){
   startCustomQuiz(cur.uid,wrongQs,'Review Mistakes');
 }
 function goHome(){showS('home');renderHome();}
-function showS(n){['home','study','quiz','results','bank','notes','teacher'].forEach(s=>document.getElementById('s-'+s).hidden=s!==n);}
+function showS(n){['home','study','quiz','results','bank','notes','teacher','adv','tutor','chart','ailog'].forEach(s=>document.getElementById('s-'+s).hidden=s!==n);}
 renderHome();
 </script>
 
