@@ -17,7 +17,7 @@
  */
 
 // ── 1. Settings ──────────────────────────────────────────────────────────────
-const MODE = 'teacher';        // 'off' = nobody · 'teacher' = teachers only · 'students' = teachers + students with a student ID
+const MODE = 'students';        // 'off' = nobody · 'teacher' = teachers only · 'students' = teachers + students with a student ID
 const DAILY_LIMIT = 30;        // AI uses per student per day (teachers: unlimited)
 const MODEL = 'claude-haiku-5-5';
 const CLIENT_ID = '159350431685-s7095o51b6o2dvfmci9obo28v67iai65.apps.googleusercontent.com';

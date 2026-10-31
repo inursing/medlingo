@@ -69,6 +69,19 @@ function doPost(e) {
     if (!teacher) return out_({ ok: false, error: 'forbidden' });
     return out_({ ok: true, rows: allRows_() });
   }
+  // ── Class list (teacher only) ──
+  if (req.action === 'roster') {
+    if (!teacher) return out_({ ok: false, error: 'forbidden' });
+    return out_({ ok: true, roster: rosterGet_(), linked: linkedGet_() });
+  }
+  if (req.action === 'roster_save') {
+    if (!teacher) return out_({ ok: false, error: 'forbidden' });
+    return out_(rosterSave_(req.rows));
+  }
+  if (req.action === 'unlink') {
+    if (!teacher) return out_({ ok: false, error: 'forbidden' });
+    return out_(unlink_(String(req.email || '').toLowerCase()));
+  }
   return out_({ ok: false, error: 'unknown_action' });
 }
 
@@ -213,6 +226,56 @@ function allRows_() {
   return sh.getRange(2, 1, sh.getLastRow() - 1, w).getValues()
     .filter(r => r[0])
     .map(r => { let rec = {}; try { rec = JSON.parse(r[w - 1]); } catch (e) {} return { email: r[0], sid: String(r[1] || ''), name: String(r[2] || ''), googleName: String(r[3] || ''), record: rec }; });
+}
+
+// ── 5. Class list (Roster sheet) ─────────────────────────────────────────────
+function rosterGet_() {
+  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ROSTER_NAME);
+  if (!sh || sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 2).getValues()
+    .map(r => ({ sid: String(r[0] || '').trim(), name: String(r[1] || '').trim() }))
+    .filter(r => r.sid);
+}
+function linkedGet_() {
+  const sh = sheet_();
+  if (sh.getLastRow() < 2) return [];
+  return sh.getRange(2, 1, sh.getLastRow() - 1, 6).getValues()
+    .filter(r => r[0])
+    .map(r => ({ email: String(r[0]), sid: String(r[1] || '').trim(), name: String(r[2] || '').trim(), gname: String(r[3] || ''), last: String(r[5] || '') }));
+}
+function rosterSave_(rows) {
+  if (!Array.isArray(rows) || rows.length > 2000) return { ok: false, error: 'bad_request' };
+  const seen = {}, clean = [];
+  for (const r of rows) {
+    const sid = String(r && r.sid || '').trim().toUpperCase(), name = String(r && r.name || '').trim().replace(/\s+/g, ' ');
+    if (!/^[A-Z0-9]{4,20}$/.test(sid) || !name || name.length > 40) return { ok: false, error: 'bad_row', sid: sid, name: name };
+    if (seen[sid]) return { ok: false, error: 'dup_sid', sid: sid };
+    seen[sid] = 1; clean.push([sid, name]);
+  }
+  const lock = LockService.getScriptLock(); lock.waitLock(15000);
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sh = ss.getSheetByName(ROSTER_NAME);
+    if (!sh) sh = ss.insertSheet(ROSTER_NAME);
+    sh.clearContents();
+    sh.getRange(1, 1, 1, 2).setValues([['Student ID', 'Name']]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    if (clean.length) {
+      sh.getRange(2, 1, clean.length, 1).setNumberFormat('@');
+      sh.getRange(2, 1, clean.length, 2).setValues(clean);
+    }
+  } finally { lock.releaseLock(); }
+  return { ok: true, count: clean.length };
+}
+function unlink_(email) {
+  if (!email) return { ok: false, error: 'bad_request' };
+  const lock = LockService.getScriptLock(); lock.waitLock(15000);
+  try {
+    const sh = sheet_(), row = findRow_(sh, email);
+    if (!row) return { ok: false, error: 'not_found' };
+    sh.getRange(row, 2, 1, 2).clearContent();
+  } finally { lock.releaseLock(); }
+  return { ok: true };
 }
 
 function out_(o) {

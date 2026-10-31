@@ -288,6 +288,17 @@ details.sc-ex[open] .ex-arrow{transform:rotate(90deg);color:var(--teal)}
 .al-row{background:var(--card);border:1px solid var(--bdr);border-radius:10px;margin-bottom:8px}.al-row summary{cursor:pointer;padding:10px 14px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;list-style:none}
 .al-who{font-weight:700}.al-f{font-size:12px;color:#6D28D9}.al-t{font-size:12px;color:var(--fg3);margin-left:auto}.al-q{flex-basis:100%;font-size:13px;color:var(--fg2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .al-body{padding:0 14px 12px}.al-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--fg3);margin-top:8px}.al-pre{white-space:pre-wrap;font-size:13.5px;line-height:1.6;overflow-wrap:anywhere}
+.rs-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--fg3);margin:0 0 12px}.rs-bar.on{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:2px solid var(--amber);border-radius:10px;padding:8px 12px;color:var(--fg)}.rs-bar.on span{flex:1;font-weight:700}
+.rs-warn{font-size:13.5px;line-height:1.6;background:rgba(217,137,10,.12);border:1px solid var(--amber);border-radius:10px;padding:10px 12px;margin:0 0 12px}
+.rs-box{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px}.rs-box summary{cursor:pointer}
+.rs-add{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.rs-add .qs-sel{flex:1;min-width:140px;margin:0;font-size:16px}
+.rs-lbl{font-size:12.5px;color:var(--fg2);margin:6px 0}.rs-paste{width:100%;box-sizing:border-box;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:0 0 8px}
+.rs-msg{font-size:12.5px;color:var(--fg2)}
+.rs-tr{display:grid;grid-template-columns:minmax(100px,1fr) minmax(80px,1fr) minmax(170px,2fr) auto;gap:8px;align-items:center;padding:9px 14px;border-top:1px solid var(--bdr);font-size:13.5px;min-width:560px}
+.rs-th{border-top:0;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--fg3)}
+.rs-sid{font-family:ui-monospace,Menlo,Consolas,monospace}.rs-ok{color:var(--green);overflow-wrap:anywhere}.rs-no{color:var(--fg3)}.rs-bad{color:var(--red)}
+.rs-act{display:flex;gap:6px;justify-content:flex-end;align-items:center}.rs-act .sc-audio{margin:0}
+@media(max-width:560px){.rs-tr{grid-template-columns:auto 1fr auto;min-width:0;row-gap:2px}.rs-tr>span:nth-child(3){grid-column:1/-1;order:3;font-size:12.5px}.rs-act{order:2}.rs-th{display:none}}
 </style>
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -353,6 +364,10 @@ details.sc-ex[open] .ex-arrow{transform:rotate(90deg);color:var(--teal)}
   <div id="al-list"></div>
 </div>
 <div class="gate" id="ai-mini" hidden onclick="if(event.target===this)aiMiniClose()"><div class="gate-card ai-mini-card"></div></div>
+<div id="s-roster" hidden>
+  <div class="topnav"><button class="backbtn" onclick="teacherOpen()">←</button><div class="navinfo"><div class="navlbl">Class List · 學生名單</div></div><button class="sc-audio" style="margin:0" onclick="RS.dirty=false;RS.loaded=false;rosterOpen()">↻</button></div>
+  <div id="rs-body"></div>
+</div>
 <div class="gate" id="gate" hidden><div class="gate-card"><div style="font-size:40px">🏥</div><h2>MedLingo</h2><p>Sign in with your school Google account to start.<br>Your progress is saved to your account.</p><div id="gate-btn"></div></div></div>
 <div class="gate" id="pf" hidden><form class="gate-card pf-card" onsubmit="profileSubmit(event)">
   <h2>Student ID · 學號</h2><p>Link your Google account <b id="pf-email"></b> to your student record. This is done once — ask your teacher if you need to change it later.</p><p class="pf-note">Signing in requires your student ID and name. Without them you can still use MedLingo as a guest, but your progress stays on this device only.</p>
@@ -365,7 +380,7 @@ details.sc-ex[open] .ex-arrow{transform:rotate(90deg);color:var(--teal)}
   <div class="topnav">
     <button class="backbtn" onclick="goHome()">←</button>
     <div class="navinfo"><div class="navlbl">Teacher Dashboard · 學生使用紀錄</div></div>
-    <button class="sc-audio" style="margin:0" onclick="teacherOpen()">↻</button><button class="sc-audio" style="margin:0 0 0 6px" onclick="teacherCSV()">⬇ CSV</button>
+    <button class="sc-audio" style="margin:0" onclick="rosterOpen()">👥 Class List</button><button class="sc-audio" style="margin:0 0 0 6px" onclick="teacherOpen()">↻</button><button class="sc-audio" style="margin:0 0 0 6px" onclick="teacherCSV()">⬇ CSV</button>
   </div>
   <div class="stats td-sum" id="td-sum"></div>
   <div class="qs-chips" style="margin-bottom:10px"><button class="qs-chip on" id="tds-last" onclick="TD.sort='last';this.classList.add('on');document.getElementById('tds-sid').classList.remove('on');teacherRender()">Sort: last active</button><button class="qs-chip" id="tds-sid" onclick="TD.sort='sid';this.classList.add('on');document.getElementById('tds-last').classList.remove('on');teacherRender()">Sort: student ID</button></div>
@@ -4092,6 +4107,107 @@ const CONFIG={
 };
 const ONLINE=!!(CONFIG.GOOGLE_CLIENT_ID&&CONFIG.SCRIPT_URL);
 
+// ───────────── Class List · 學生名單 (teacher only; stored in the "Roster" tab of the Google Sheet) ─────────────
+const RS={list:[],linked:[],dirty:false,filter:'',loaded:false,busy:false};
+const rsEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rsN=s=>String(s||'').replace(/\s+/g,'').toUpperCase();
+async function rosterOpen(){
+  showS('roster');window.scrollTo(0,0);
+  const box=document.getElementById('rs-body');
+  if(!TR.teacher){box.innerHTML='<div class="nt-empty">Sign in with a teacher account to manage the class list.</div>';return;}
+  if(!tokenValid()){box.innerHTML='<div class="nt-empty">Your sign-in expired — go back and sign in again.</div>';return;}
+  if(RS.dirty&&RS.loaded){rosterRender();return;}
+  box.innerHTML='<div class="nt-empty">Loading… · 載入中…</div>';
+  try{const r=await api({action:'roster'});if(!r.ok)throw 0;RS.list=r.roster||[];RS.linked=r.linked||[];RS.dirty=false;RS.loaded=true;rosterRender();}
+  catch(e){box.innerHTML='<div class="nt-empty">Could not load the class list. The progress Apps Script may need its new version deployed. · 無法載入名單。</div>';}
+}
+function rosterRows(){
+  const bySid=new Map();RS.linked.forEach(l=>{if(l.sid)bySid.set(rsN(l.sid),l);});
+  return RS.list.map((r,i)=>({...r,i,link:bySid.get(rsN(r.sid))||null}));
+}
+function rosterRender(){
+  const rows=rosterRows();const onList=new Set(RS.list.map(r=>rsN(r.sid)));
+  const extra=RS.linked.filter(l=>l.sid&&!onList.has(rsN(l.sid)));
+  const noId=RS.linked.filter(l=>!l.sid);
+  const nLinked=rows.filter(r=>r.link).length;
+  const f=RS.filter.toLowerCase();
+  const shown=rows.filter(r=>!f||(r.sid+' '+r.name+' '+(r.link?r.link.email:'')).toLowerCase().includes(f));
+  document.getElementById('rs-body').innerHTML=`
+  <div class="stats td-sum">
+    <div class="sbox"><div class="n">${RS.list.length}</div><div class="l">On list · 名單</div></div>
+    <div class="sbox"><div class="n">${nLinked}</div><div class="l">Linked · 已綁定</div></div>
+    <div class="sbox"><div class="n">${RS.list.length-nLinked}</div><div class="l">Not yet · 未登入</div></div>
+    <div class="sbox"><div class="n">${extra.length+noId.length}</div><div class="l">Not on list · 名單外</div></div>
+  </div>
+  ${RS.list.length?'':'<p class="rs-warn">The class list is empty, so <b>any</b> student ID is accepted when students link their account. Add your students below to allow only them. · 名單是空的：目前任何學號都能綁定。加入名單後只有名單上的學生能綁定。</p>'}
+  <div class="rs-bar ${RS.dirty?'on':''}">${RS.dirty?`<span>Unsaved changes · 尚未儲存</span><button class="sc-audio" onclick="rosterDiscard()">Discard</button><button class="sbtn sbtn-next" onclick="rosterSave()" ${RS.busy?'disabled':''}>${RS.busy?'Saving…':'Save list · 儲存名單'}</button>`:'<span>Saved · 已儲存到試算表的 Roster 工作表</span>'}</div>
+  <details class="rs-box" ${RS.list.length?'':'open'}><summary><b>➕ Add students · 新增學生</b></summary>
+    <form class="rs-add" onsubmit="rosterAddOne(event)"><input id="rs-sid" class="qs-sel" placeholder="Student ID 學號" maxlength="20" autocomplete="off"><input id="rs-name" class="qs-sel" placeholder="Name 姓名" maxlength="40" autocomplete="off"><button class="sbtn sbtn-next" type="submit">Add</button></form>
+    <div class="rs-lbl">Or paste many at once — copy two columns (Student ID, Name) from Excel or the school system: · 或一次貼上多筆（從 Excel 複製「學號、姓名」兩欄）</div>
+    <textarea id="rs-paste" class="qs-sel rs-paste" rows="5" placeholder="B123456789	陳美玲&#10;B123456790	王小明"></textarea>
+    <div class="pf-btns" style="justify-content:flex-start"><button class="sbtn sbtn-next" type="button" onclick="rosterPaste()">Add pasted list · 加入</button><span class="rs-msg" id="rs-msg"></span></div>
+  </details>
+  <div class="al-ctrl" style="margin-top:14px"><input class="qs-sel" type="search" placeholder="Search student ID, name, email…" value="${rsEsc(RS.filter)}" oninput="RS.filter=this.value;rosterRender();const e=document.querySelector('#rs-body input[type=search]');e.focus();e.setSelectionRange(e.value.length,e.value.length)"></div>
+  <div class="td-table rs-table">
+    <div class="rs-tr rs-th"><span>Student ID</span><span>Name</span><span>Google account · 狀態</span><span></span></div>
+    ${shown.length?shown.map(r=>`<div class="rs-tr"><span class="rs-sid">${rsEsc(r.sid)}</span><span>${rsEsc(r.name)}</span>
+      <span>${r.link?`<span class="rs-ok">✓ ${rsEsc(r.link.email)}</span>${r.link.name&&rsN(r.link.name)!==rsN(r.name)?` <small class="rs-bad">(entered: ${rsEsc(r.link.name)})</small>`:''}`:'<span class="rs-no">Not linked yet · 尚未登入</span>'}</span>
+      <span class="rs-act">${r.link?`<button class="sc-audio" title="Let this student link again (e.g. new Google account)" onclick="rosterUnlink(${jsq(r.link.email)})">Unlink</button>`:''}<button class="nt-x" title="Remove from list" onclick="rosterRemove(${r.i})">✕</button></span></div>`).join('')
+      :`<div class="nt-empty" style="border:0">${RS.list.length?'No match.':'No students on the list yet. · 名單還沒有學生。'}</div>`}
+  </div>
+  ${extra.length||noId.length?`<p class="sec-lbl" style="margin-top:22px">Signed in but not on the list · 已登入但不在名單上</p>
+  <p class="qs-hint" style="margin:0 0 10px">These accounts linked before the list existed or without a student ID. Add them to the list, or Unlink to make them link again (they will then need to be on the list). · 這些帳號在名單建立前就綁定，或沒填學號。</p>
+  <div class="td-table rs-table">${[...extra,...noId].map(l=>`<div class="rs-tr"><span class="rs-sid">${rsEsc(l.sid||'—')}</span><span>${rsEsc(l.name||l.gname||'')}</span><span>${rsEsc(l.email)}</span>
+    <span class="rs-act">${l.sid?`<button class="sc-audio" onclick="rosterAddLinked(${jsq(l.sid)},${jsq(l.name||l.gname||'')})">Add to list</button>`:''}${l.sid?`<button class="sc-audio" onclick="rosterUnlink(${jsq(l.email)})">Unlink</button>`:''}</span></div>`).join('')}</div>`:''}
+  <p class="qs-hint" style="margin-top:14px">Students on the list link once with their student ID + name (must match). One student ID = one Google account. <b>Unlink</b> clears a student's link so they can sign in with a different account; their learning records are kept. · 學號與姓名需與名單相符；一個學號只能綁一個 Google 帳號。Unlink 只解除綁定，不會刪除學習紀錄。</p>`;
+}
+function rosterMark(){RS.dirty=true;rosterRender();}
+function rosterUpsert(sid,name){
+  sid=String(sid||'').trim().toUpperCase();name=String(name||'').trim().replace(/\s+/g,' ');
+  if(!/^[A-Z0-9]{4,20}$/.test(sid)||!/\d/.test(sid)||!name||name.length>40)return 'bad';
+  const ex=RS.list.find(r=>rsN(r.sid)===sid);
+  if(ex){if(ex.name===name)return 'same';ex.name=name;return 'upd';}
+  RS.list.push({sid,name});return 'add';
+}
+function rosterAddOne(ev){
+  ev.preventDefault();const s=document.getElementById('rs-sid').value,n=document.getElementById('rs-name').value;
+  const r=rosterUpsert(s,n);
+  if(r==='bad'){document.getElementById('rs-msg').textContent='Student ID: 4–20 letters/digits; name required. · 學號 4–20 碼英數字，姓名必填。';return;}
+  rosterMark();setTimeout(()=>{const e=document.getElementById('rs-sid');if(e){e.closest('details').open=true;e.focus();}},30);
+}
+function rosterPaste(){
+  const t=document.getElementById('rs-paste').value;let add=0,upd=0,bad=[];
+  t.split(/\r?\n/).forEach(line=>{line=line.trim();if(!line)return;
+    let parts=line.split(/\t|,|，/).map(x=>x.trim()).filter(Boolean);
+    if(parts.length<2){const m=line.match(/^([A-Za-z]*\d[A-Za-z0-9]{3,19})\s+(.+)$/)||line.match(/^(.+?)\s+([A-Za-z]*\d[A-Za-z0-9]{3,19})$/);if(m)parts=[m[1],m[2]];}
+    if(parts.length<2){bad.push(line);return;}
+    let [a,b]=parts;const isId=x=>/^[A-Za-z0-9]{4,20}$/.test(x)&&/\d/.test(x);if(!isId(a)&&isId(b))[a,b]=[b,a];
+    if(/^student\s*id$|^學號$/i.test(a))return;
+    const r=rosterUpsert(a,b);if(r==='add')add++;else if(r==='upd')upd++;else if(r==='bad')bad.push(line);});
+  RS.dirty=RS.dirty||add+upd>0;rosterRender();
+  const d=document.querySelector('#rs-body details');if(d)d.open=true;
+  if(bad.length){document.getElementById('rs-paste').value=bad.join('\n');}
+  document.getElementById('rs-msg').textContent=`Added ${add}, updated ${upd}${bad.length?`, ${bad.length} line(s) not understood (left in the box)`:''}. Remember to Save. · 新增 ${add}、更新 ${upd}${bad.length?`、${bad.length} 行無法辨識`:''}，記得按儲存。`;
+}
+function rosterAddLinked(sid,name){rosterUpsert(sid,name);rosterMark();}
+function rosterRemove(i){RS.list.splice(i,1);rosterMark();}
+function rosterDiscard(){RS.dirty=false;RS.loaded=false;rosterOpen();}
+async function rosterSave(){
+  if(RS.busy)return;RS.busy=true;rosterRender();
+  try{const r=await api({action:'roster_save',rows:RS.list});
+    if(!r.ok){RS.busy=false;rosterRender();const m=document.querySelector('.rs-bar span');if(m)m.textContent=r.error==='dup_sid'?`Duplicate student ID: ${r.sid}`:r.error==='bad_row'?`Check this row: ${r.sid||'(no ID)'} ${r.name||'(no name)'}`:'Could not save. Please try again.';return;}
+    RS.dirty=false;}
+  catch(e){RS.busy=false;rosterRender();const m=document.querySelector('.rs-bar span');if(m)m.textContent='Could not reach the server. Please try again.';return;}
+  RS.busy=false;RS.loaded=false;rosterOpen();
+}
+async function rosterUnlink(email){
+  const row=document.querySelector('.rs-bar');
+  try{const r=await api({action:'unlink',email});if(!r.ok)throw 0;
+    const l=RS.linked.find(x=>x.email===email);if(l){l.sid='';l.name='';}rosterRender();}
+  catch(e){if(row)row.querySelector('span').textContent='Could not unlink. Please try again.';}
+}
+
+
 // ═══════════════════ Advanced Practice · 進階學習 (Claude AI, separate backend) ═══════════════════
 // Shown only when CONFIG.AI_URL is set AND the AI backend says this signed-in user may use it.
 // Nothing here runs for guests, and the rest of MedLingo never depends on it.
@@ -4437,7 +4553,7 @@ function signOut(){
   try{sessionStorage.removeItem(PKEY+'_tok');}catch(e){}
   if(TR.dirty)trFlush();
   Object.assign(TR,{ref:null,data:null,token:null,who:null,teacher:false,state:TR.guest?'guest':'out',session:false,profile:null,pendingRecord:null});AI.enabled=false;AI.chat=[];AI.card=null;AI.chart=null;
-  if(['adv','tutor','chart','ailog'].some(n=>!document.getElementById('s-'+n).hidden))showS('home');document.getElementById('pf').hidden=true;
+  if(['adv','tutor','chart','ailog','roster'].some(n=>!document.getElementById('s-'+n).hidden))showS('home');document.getElementById('pf').hidden=true;
   renderAcct();renderHome();
 }
 function renderAcct(){
@@ -4755,7 +4871,7 @@ function wrongOnlyQuiz(){
   startCustomQuiz(cur.uid,wrongQs,'Review Mistakes');
 }
 function goHome(){showS('home');renderHome();}
-function showS(n){['home','study','quiz','results','bank','notes','teacher','adv','tutor','chart','ailog'].forEach(s=>document.getElementById('s-'+s).hidden=s!==n);}
+function showS(n){['home','study','quiz','results','bank','notes','teacher','adv','tutor','chart','ailog','roster'].forEach(s=>document.getElementById('s-'+s).hidden=s!==n);}
 renderHome();
 </script>
 
