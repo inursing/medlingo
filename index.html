@@ -4672,10 +4672,14 @@ async function rosterUnlink(email){
 const AI={enabled:false,teacher:false,limit:0,used:0,busy:false,chat:[],card:null,chart:null,recent:[]};
 const aiEsc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function aiApi(body){
-  if(!CONFIG.AI_URL||!tokenValid())throw new Error('auth');
-  const r=await fetch(CONFIG.AI_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...body,token:TR.token})});
-  return r.json();
+  if(!CONFIG.AI_URL)throw new Error('auth');
+  if(!tokenValid()&&!(await freshToken()))throw new Error('auth');   // Google sign-in tokens last 1 hour: renew quietly first
+  const send=async()=>{const r=await fetch(CONFIG.AI_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...body,token:TR.token})});return r.json();};
+  let r;try{r=await send();}catch(e){await new Promise(z=>setTimeout(z,1500));r=await send();}   // one retry on a network hiccup
+  if(r&&!r.ok&&r.detail)console.warn('[MedLingo AI]',r.error,r.detail);
+  return r;
 }
+const aiCatch=e=>({error:e&&e.message==='auth'?'auth':'ai_error'});
 async function aiHello(){
   AI.enabled=false;
   if(!CONFIG.AI_URL||TR.state!=='in')return;
@@ -4690,7 +4694,7 @@ function aiQuota(){return AI.limit?`${Math.max(0,AI.limit-AI.used)} / ${AI.limit
 function aiErr(r){
   const m={limit:`You have used all ${AI.limit} AI uses for today. Come back tomorrow! · 今天的 AI 使用次數已用完，明天再來！`,
     no_key:'The AI is not set up yet (no API key). Please tell your teacher. · AI 尚未設定完成，請告訴老師。',
-    auth:'Your sign-in expired — go back and sign in again. · 登入已過期，請重新登入。',
+    auth:'Your sign-in expired — please sign in again (top right). · 登入已過期，請重新登入（右上角）。',
     too_long:'Please keep your question under 600 characters. · 問題請在 600 字以內。',
     ai_format:'The AI gave an unusable answer. Please try again. · AI 回覆格式有誤，請再試一次。',
     ai_error:'The AI service is busy or unavailable. Please try again in a moment. · AI 服務忙碌中，請稍後再試。'};
@@ -4780,7 +4784,7 @@ async function tutorAsk(q){
     const r=await aiApi({action:'ask',messages:msgs,card});
     if(r.ok){AI.chat.push({role:'assistant',content:r.answer});AI.used=r.used||AI.used;}
     else{AI.chat.pop();AI.chat.push({role:'user',content:q},{role:'assistant',content:aiErr(r),err:true});if(r.used!=null)AI.used=r.used;}
-  }catch(e){AI.chat.push({role:'assistant',content:aiErr({error:'ai_error'}),err:true});}
+  }catch(e){AI.chat.push({role:'assistant',content:aiErr(aiCatch(e)),err:true});}
   AI.busy=false;tutorRender();
 }
 function tutorSubmit(ev){ev.preventDefault();const el=document.getElementById('tu-q');const q=el.value;el.value='';tutorAsk(q);}
@@ -4870,7 +4874,7 @@ async function chartNew(){
       const sc=chartScan(r.note);
       if(sc.unknown.length===0&&sc.found.length>=2)res={note:r.note,items:sc.found};
       else err={error:'ai_format'};
-    }catch(e){err={error:'ai_error'};}
+    }catch(e){err=aiCatch(e);}
   }
   AI.busy=false;chartRenderSetup();
   if(!res){box.innerHTML=`<div class="nt-empty">${aiEsc(aiErr(err))}</div>`;return;}
@@ -4922,7 +4926,7 @@ async function chartExplain(){
   const C=AI.chart;if(!C||AI.busy)return;AI.busy=true;chartRenderWork();
   try{const r=await aiApi({action:'explain',note:C.note,key:C.items.map(it=>({a:it.shown,t:it.items[0].term,zh:it.items[0].zh}))});
     if(r.used!=null)AI.used=r.used;C.explain=r.ok?{text:r.answer}:{text:aiErr(r),err:true};}
-  catch(e){C.explain={text:aiErr({error:'ai_error'}),err:true};}
+  catch(e){C.explain={text:aiErr(aiCatch(e)),err:true};}
   AI.busy=false;document.getElementById('ch-quota').textContent=aiQuota();chartRenderWork();
 }
 
@@ -4931,7 +4935,7 @@ let AILOG=[];
 async function aiLogOpen(){
   showS('ailog');window.scrollTo(0,0);const box=document.getElementById('al-list');box.innerHTML='<div class="nt-empty">Loading… · 載入中…</div>';
   try{const r=await aiApi({action:'log',limit:300});if(!r.ok)throw 0;AILOG=r.rows||[];aiLogRender();}
-  catch(e){box.innerHTML=`<div class="nt-empty">${aiEsc(aiErr({error:'ai_error'}))}</div>`;}
+  catch(e){box.innerHTML=`<div class="nt-empty">${aiEsc(aiErr(aiCatch(e)))}</div>`;}
 }
 function aiLogRender(){
   const f=(document.getElementById('al-q').value||'').toLowerCase(),only=document.getElementById('al-stu').checked;
@@ -4947,7 +4951,18 @@ function aiLogRender(){
 // ───────────── Account + sync (Google sign-in → Apps Script → Google Sheet) ─────────────
 const TR={ref:null,data:null,queue:[],dirty:false,writing:false,timer:null,session:false,teacher:false,token:null,who:null,state:'off',profile:null};
 function jwtPayload(t){try{const b=t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}catch(e){return null;}}
-function tokenValid(){return TR.who&&TR.who.exp*1000>Date.now()+30000;}
+function tokenValid(){return !!(TR.who&&TR.who.exp*1000>Date.now()+30000);}
+// Renew the 1-hour Google sign-in token without a page reload (FedCM auto re-auth; if that is not possible
+// Google shows its small sign-in prompt). Resolves true once a fresh token has arrived.
+let _tokP=null;
+function freshToken(ms=10000){
+  if(tokenValid())return Promise.resolve(true);
+  if(!TR.who||!(window.google&&google.accounts&&google.accounts.id))return Promise.resolve(false);
+  if(_tokP)return _tokP;
+  _tokP=new Promise(res=>{const t0=Date.now();try{google.accounts.id.prompt();}catch(e){}
+    const iv=setInterval(()=>{if(tokenValid()||Date.now()-t0>ms){clearInterval(iv);_tokP=null;res(tokenValid());}},300);});
+  return _tokP;
+}
 async function api(body){
   const r=await fetch(CONFIG.SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({...body,token:TR.token})});
   return r.json();
@@ -4970,7 +4985,7 @@ function track(ev,arg){
 }
 async function trFlush(){
   if(!TR.ref||!TR.dirty||TR.writing)return;
-  if(!tokenValid()){TR.state='expired';renderAcct();return;}
+  if(!tokenValid()&&!(await freshToken())){TR.state='expired';renderAcct();return;}
   TR.writing=true;TR.dirty=false;
   try{const r=await api({action:'save',record:TR.data});TR.retry=0;if(!r.ok){if(r.error==='auth'){TR.state='expired';renderAcct();}else if(r.error==='no_profile'){TR.ref=null;TR.profile=null;TR.state='pending';renderAcct();profileOpen();return;}TR.dirty=true;}}
   catch(e){TR.dirty=true;TR.retry=Math.min((TR.retry||2000)*2,60000);setTimeout(trFlush,TR.retry+Math.random()*3000);return;}
@@ -4982,7 +4997,13 @@ document.addEventListener('visibilitychange',()=>{
   }
 });
 async function onCredential(resp){
-  const p=jwtPayload(resp.credential);if(!p)return;TR.guest=false;
+  const p=jwtPayload(resp.credential);if(!p)return;
+  if(TR.who&&TR.who.email===p.email&&(TR.state==='in'||TR.state==='expired')&&(TR.teacher||TR.profile)){
+    // Same person, token renewed: just swap the token, keep everything else as it is.
+    TR.token=resp.credential;TR.who.exp=p.exp;try{sessionStorage.setItem(PKEY+'_tok',resp.credential);}catch(e){}
+    const was=TR.state;TR.state='in';renderAcct();if(TR.dirty)trFlush();if(was==='expired'&&!AI.enabled)aiHello();return;
+  }
+  TR.guest=false;
   TR.token=resp.credential;TR.who={email:p.email,name:p.name||p.email,picture:p.picture||'',exp:p.exp};TR.state='connecting';renderAcct();
   try{sessionStorage.setItem(PKEY+'_tok',resp.credential);}catch(e){}
   try{
