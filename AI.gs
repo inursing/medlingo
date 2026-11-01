@@ -5,10 +5,11 @@
  * section of the page (Ask the Tutor + Chart Reader). If it is off, broken or out of
  * credit, the rest of MedLingo (study, quizzes, progress saving) is not affected.
  *
- * Your Claude API key is NOT in this file. Put it in:
- *   Project Settings (gear icon) → Script properties → Add property
- *   Property: ANTHROPIC_API_KEY   Value: sk-ant-...
- * (Optional) ANTHROPIC_WORKSPACE_ID if your key is not scoped to a workspace.
+ * Claude is called through the MedLingo AI proxy (Cloudflare Worker "medlingo-ai-proxy", repo inursing/medlingo-ai-proxy), which uses
+ * the official Anthropic SDK and reads ANTHROPIC_API_KEY from its environment variables.
+ * This project only needs two Script properties (Project Settings → Script properties):
+ *   PROXY_URL      the Worker URL, https://medlingo-ai-proxy.nursingsmiley.workers.dev
+ *   PROXY_SECRET   the same long random string set as the PROXY_SECRET secret on the Worker
  *
  * It reads the "Usage" sheet of your MedLingo spreadsheet (to check student ID + name)
  * and writes two tabs there: "AI Log" (every question / answer) and nothing else.
@@ -19,7 +20,7 @@
 // ── 1. Settings ──────────────────────────────────────────────────────────────
 const MODE = 'students';        // 'off' = nobody · 'teacher' = teachers only · 'students' = teachers + students with a student ID
 const DAILY_LIMIT = 30;        // AI uses per student per day (teachers: unlimited)
-const MODEL = 'claude-haiku-5-5';
+const MODEL = 'claude-sonnet-5-5';
 const CLIENT_ID = '159350431685-s7095o51b6o2dvfmci9obo28v67iai65.apps.googleusercontent.com';
 const TEACHERS = ['a103262003@gmail.com'];
 const SHEET_ID = '102pv4vb0rmB8YzZQcbH6RC9m-vJhS4nv4q56Z9WIx8Y';   // the MedLingo 學生紀錄 spreadsheet
@@ -52,7 +53,8 @@ function doPost(e) {
     return out_({ ok: true, rows: readLog_(Number(req.limit) || 300) });
   }
   if (['ask', 'chart', 'explain'].indexOf(req.action) < 0) return out_({ ok: false, error: 'unknown_action' });
-  if (!PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY')) return out_({ ok: false, error: 'no_key' });
+  const P = PropertiesService.getScriptProperties();
+  if (!P.getProperty('PROXY_URL') || !P.getProperty('PROXY_SECRET')) return out_({ ok: false, error: 'no_key' });
   if (!teacher && used >= DAILY_LIMIT) return out_({ ok: false, error: 'limit', limit: DAILY_LIMIT, used: used });
 
   let res;
@@ -137,18 +139,22 @@ function explain_(req) {
 
 // ── 4. Claude API ────────────────────────────────────────────────────────────
 function claude_(system, messages, maxTokens) {
+  // Claude is called through the MedLingo AI proxy (Cloudflare Worker), which uses the official
+  // Anthropic SDK and reads ANTHROPIC_API_KEY from its own environment variables.
+  // Script properties: PROXY_URL (https://...workers.dev) and PROXY_SECRET (same value as on the Worker).
   const props = PropertiesService.getScriptProperties();
-  const headers = { 'x-api-key': props.getProperty('ANTHROPIC_API_KEY'), 'anthropic-version': '2023-06-01' };
-  const ws = props.getProperty('ANTHROPIC_WORKSPACE_ID');
-  if (ws) headers['anthropic-workspace-id'] = ws;
-  const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
-    method: 'post', contentType: 'application/json', headers: headers, muteHttpExceptions: true,
+  const url = props.getProperty('PROXY_URL'), secret = props.getProperty('PROXY_SECRET');
+  if (!url || !secret) throw new Error('proxy_not_configured');
+  const res = UrlFetchApp.fetch(url.replace(/\/+$/, '') + '/messages', {
+    method: 'post', contentType: 'application/json', headers: { 'x-proxy-secret': secret }, muteHttpExceptions: true,
     payload: JSON.stringify({ model: MODEL, max_tokens: maxTokens, system: system, messages: messages })
   });
   const code = res.getResponseCode(), body = res.getContentText();
-  if (code !== 200) throw new Error('API ' + code + ': ' + body.slice(0, 200));
+  if (code !== 200) throw new Error('proxy ' + code + ': ' + body.slice(0, 200));
   const j = JSON.parse(body);
-  return (j.content || []).filter(c => c.type === 'text').map(c => c.text).join('').trim();
+  if (!j.ok) throw new Error('proxy: ' + (j.detail || j.error));
+  if (!j.text) throw new Error('empty_reply');
+  return j.text;
 }
 
 // ── 5. Sign-in check, student ID, usage, log ─────────────────────────────────
@@ -229,3 +235,11 @@ function readLog_(limit) {
 }
 
 function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+
+// ── 6. Test (run from the editor: select testProxy → Run, then check the Execution log) ──
+function testProxy() {
+  const p = PropertiesService.getScriptProperties();
+  const res = UrlFetchApp.fetch(p.getProperty('PROXY_URL') + '/messages', { method: 'post', contentType: 'application/json', headers: { 'x-proxy-secret': p.getProperty('PROXY_SECRET') }, muteHttpExceptions: true,
+    payload: JSON.stringify({ model: MODEL, max_tokens: 300, system: 'Reply in one short line.', messages: [{ role: 'user', content: 'Say MedLingo proxy OK.' }] }) });
+  Logger.log(res.getResponseCode() + ' ' + res.getContentText().slice(0, 1500));
+}
